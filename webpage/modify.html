@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>User Information Modify</h1>
+    <p>Please put in the new password, name, major and grade</p>
+    <form id="modify-form">
+        <p>
+            <label for="user-id">ID:</label>
+            <span id="display-id"></span>
+        </p>
+        <p>
+            <label>new password</label>
+            <input type="text" id="password" name="password" placeholder="put in password here">
+        </p>
+        <p>
+            <label>new name</label>
+            <input type="text" id="name" name="name" placeholder="put in name here">
+        </p>
+        <div id="hideornot">
+        <p>
+            <label>new major</label>
+            <input type="text" id="major" name="major" placeholder="put in major here">
+        </p>
+        <p>
+            <label>new grade</label>
+            <input type="text" id="grade" name="grade" placeholder="put in grade here">
+        </p>
+        </div>
+        <p>
+            <button type="button" id="modify">Confirm</button>
+        </p>
+        <p>
+            <button type="button" id="panel">Back to Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    let userrole=null;
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/who");
+        const result=await response.json();
+        const id=result.id;
+        const role=result.role;
+        userrole=role;
+        const container=document.getElementById("hideornot");
+        if(role=="admin")
+        {
+            container.style.display="none";
+        }
+        else
+        {
+            container.style.display="block";
+        }
+        document.getElementById("display-id").textContent=id;
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch ID!");
+        }
+    })
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        if(userrole!="admin")
+        {
+            window.location.href="datacenter.html";
+        }
+        else
+        {
+            window.location.href="adminpanel.html";
+        }
+    });
+    document.getElementById("modify").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const password=document.getElementById("password").value;
+        const name=document.getElementById("name").value;
+        const major=document.getElementById("major").value;
+        const grade=document.getElementById("grade").value;
+
+        
+        try{
+        const response=await fetch("http://localhost:8080/modify",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    password:password,
+                    name:name,
+                    major:major,
+                    grade:grade
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Modify Successfully!");
+            if(userrole!="admin")
+            {
+                window.location.href="datacenter.html";
+            }
+            else
+            {
+                window.location.href="adminpanel.html";
+            }
+        }
+        else
+        {
+            alert("Modify Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+</script>
+</html>

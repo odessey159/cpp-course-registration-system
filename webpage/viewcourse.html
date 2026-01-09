@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Courses Information</h1>
+    <p>View the Courses</p>
+    <table border="1" id="coursetable">
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Credits</th>
+            <th>School</th>
+            <th>Starting Time</th>
+            <th>Ending Time</th>
+            <th>Week Day</th>
+            <th>Location</th>
+        </tr>
+    </table>
+    <form id="viewcourse-form">
+        
+        <p>
+            <button type="button" id="panel">Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/course_info");
+        const result=await response.json();
+        
+        const course_table=document.getElementById("coursetable");
+
+        result.courses.forEach(c => {
+            const row=document.createElement("tr");
+            row.innerHTML= `
+                <td>${c.id}</td>
+                <td>${c.name}</td>
+                <td>${c.credits}</td>
+                <td>${c.school}</td>
+                <td>${c.startingtime}</td>
+                <td>${c.endingtime}</td>
+                <td>${c.weekday}</td>
+                <td>${c.location}</td>
+            `;
+            course_table.appendChild(row);
+        });
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch Courses!");
+        }
+    })
+
+    
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="datacenter.html";
+    });
+    
+</script>
+</html>

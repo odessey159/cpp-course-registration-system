@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Panel</h1>
+    <p>Click the Bottons</p>
+    <form id="datacenter-form">
+        <p>
+            <button type="button" id="modify">Modify Personal Information</button>
+        </p>
+        <p>
+            <button type="button" id="viewcourse">View Courses</button>
+        </p>
+        <p>
+            <button type="button" id="add">Add Courses</button>
+        </p>
+        <p>
+            <button type="button" id="drop">Drop Courses</button>
+        </p>
+        <p>
+            <button type="button" id="change">Change Courses</button>
+        </p>
+        <p>
+            <button type="button" id="mycourses">My Courses</button>
+        </p>
+        <p>
+            <button type="button" id="logout">Log Out</button>
+        </p>
+    </form>
+</body>
+<script>
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/who");
+        const result=await response.json();
+        const id=result.id;
+        const role=result.role;
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch ID!");
+        }
+    })
+
+    document.getElementById("modify").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="modify.html";
+    });
+    document.getElementById("logout").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="login.html";
+    });
+    document.getElementById("viewcourse").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="viewcourse.html";
+    });
+    document.getElementById("add").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="select.html";
+    });
+    document.getElementById("mycourses").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="viewselectedcourses.html";
+    });
+    document.getElementById("drop").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="drop.html";
+    });
+    document.getElementById("change").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="change.html";
+    });
+    
+</script>
+</html>

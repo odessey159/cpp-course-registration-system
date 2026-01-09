@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Course System Register</h1>
+    <p>Please put in the ID, password, name, major and grade</p>
+    <form id="register-form">
+        <p>
+            <label for="user-id">ID:</label>
+            <input type="text" id="user-id" name="user-id" placeholder="put in ID here">
+        </p>
+        <p>
+            <label>password</label>
+            <input type="text" id="password" name="password" placeholder="put in password here">
+        </p>
+        <p>
+            <label>name</label>
+            <input type="text" id="name" name="name" placeholder="put in name here">
+        </p>
+        <p>
+            <label>major</label>
+            <input type="text" id="major" name="major" placeholder="put in major here">
+        </p>
+        <p>
+            <label>grade</label>
+            <input type="text" id="grade" name="grade" placeholder="put in grade here">
+        </p>
+        <p>
+            <button type="button" id="register">Register</button>
+        </p>
+        <p>
+            <button type="button" id="tologin">To Log In</button>
+        </p>
+    </form>
+</body>
+<script>
+    document.getElementById("tologin").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="login.html";
+    });
+    document.getElementById("register").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const id=document.getElementById("user-id").value.trim();
+        const password=document.getElementById("password").value;
+        const name=document.getElementById("name").value;
+        const major=document.getElementById("major").value;
+        const grade=document.getElementById("grade").value;
+
+        try{
+        const response=await fetch("http://localhost:8080/register",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    id:id,
+                    password:password,
+                    name:name,
+                    major:major,
+                    grade:grade
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Register Successfully!");
+            window.location.href="login.html";
+        }
+        else
+        {
+            alert("Register Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+</script>
+</html>

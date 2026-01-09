@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Selected Courses Information</h1>
+    <p>Drop the Courses Below</p>
+    <table border="1" id="coursetable">
+        <tr>
+            <th>Student ID</th>
+            <th>Course ID</th>
+            <th>Status</th>
+        </tr>
+    </table>
+    <form id="viewcourse-form">
+        <p>
+            <label for="student-id">Student ID:</label>
+            <input type="text" id="student-id" name="student-id" placeholder="put in student's ID here">
+        </p>
+        <p>
+            <label for="course-id">Course ID:</label>
+            <input type="text" id="course-id" name="course-id" placeholder="put in course's ID here">
+        </p>
+        <p>
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" placeholder="put in status here">
+        </p>
+        <p>
+            <button type="button" id="done">Done</button>
+        </p>
+        <p>
+            <button type="button" id="panel">Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/pendingrequest");
+        const result=await response.json();
+        
+        const course_table=document.getElementById("coursetable");
+
+        result.courses.forEach(c => {
+            const row=document.createElement("tr");
+            row.innerHTML= `
+                <td>${c.sid}</td>
+                <td>${c.id}</td>
+                <td>${c.status}</td>
+            `;
+            course_table.appendChild(row);
+        });
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch Selected Courses!");
+        }
+    })
+
+     document.getElementById("done").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const courseid=document.getElementById("course-id").value;
+        const studentid=document.getElementById("student-id").value;
+        const status=document.getElementById("status").value;
+        try{
+        const response=await fetch("http://localhost:8080/progress",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    course_id:courseid,
+                    student_id:studentid,
+                    status:status
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Done Successfully!");
+            window.location.href="progress.html";
+        }
+        else
+        {
+            alert("Done Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="adminpanel.html";
+    });
+    
+</script>
+</html>

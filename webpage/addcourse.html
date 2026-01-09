@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Course System Adding</h1>
+    <p>Please put in the course information below</p>
+    <form id="register-form">
+        <p>
+            <label for="course-id">courseID:</label>
+            <input type="text" id="course-id" name="course-id" placeholder="put in courseID here">
+        </p>
+        <p>
+            <label>credits</label>
+            <input type="text" id="credits" name="credits" placeholder="put in credits here">
+        </p>
+        <p>
+            <label>course title</label>
+            <input type="text" id="name" name="name" placeholder="put in course title here">
+        </p>
+        <p>
+            <label>department</label>
+            <input type="text" id="department" name="department" placeholder="put in department here">
+        </p>
+        <p>
+            <label>starting time</label>
+            <input type="text" id="startingtime" name="startingtime" placeholder="put in starting time here">
+        </p>
+        <p>
+            <label>ending time</label>
+            <input type="text" id="endingtime" name="endingtime" placeholder="put in ending time here">
+        </p>
+        <p>
+            <label>week day</label>
+            <input type="text" id="weekday" name="weekday" placeholder="put in week day here">
+        </p>
+        <p>
+            <label>location</label>
+            <input type="text" id="location" name="location" placeholder="put in location here">
+        </p>
+        <p>
+            <button type="button" id="add">Add</button>
+        </p>
+        <p>
+            <button type="button" id="panel">Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="adminpanel.html";
+    });
+    document.getElementById("add").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const course_id=document.getElementById("course-id").value.trim();
+        const course_name=document.getElementById("name").value;
+        const credits=document.getElementById("credits").value;
+        const starting_time=document.getElementById("startingtime").value;
+        const ending_time=document.getElementById("endingtime").value;
+        const week_day=document.getElementById("weekday").value;
+        const class_location=document.getElementById("location").value;
+        const department=document.getElementById("department").value;
+
+        try{
+        const response=await fetch("http://localhost:8080/addcourse",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    course_id:course_id,
+                    course_name:course_name,
+                    credits:credits,
+                    starting_time:starting_time,
+                    ending_time:ending_time,
+                    week_day:week_day,
+                    class_location:class_location,
+                    department:department
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Add Successfully!");
+            window.location.href="addcourse.html";
+        }
+        else
+        {
+            alert("Add Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+</script>
+</html>

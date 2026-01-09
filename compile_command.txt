@@ -1,0 +1,15 @@
+g++ -D_WIN32_WINNT=0x0A00 main.cpp login.cpp courseselect.cpp coursedrop.cpp addcourse.cpp progress.cpp coursemodify.cpp -o server.exe -lsqlite3 -lws2_32
+
+
+
+cd "C:\Users\34178\Desktop\course_selection_system"
+"D:\Google Download\sqlite-tools-win-x64-3510000\sqlite3.exe" course_system.db
+.read database.sql
+
+INSERT INTO Student (student_id, password, name, major, grade)
+VALUES ('123456', '123456', 'test', 'SDS', 2);
+INSERT INTO Admin (admin_id, password, name)
+VALUES ('admin', 'admin', 'admintest');
+
+
+drop table if exists Schedule123456;

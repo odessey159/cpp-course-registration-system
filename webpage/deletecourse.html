@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Courses Information</h1>
+    <p>Delete the Courses Below</p>
+    <table border="1" id="coursetable">
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Credits</th>
+            <th>School</th>
+            <th>Starting Time</th>
+            <th>Ending Time</th>
+            <th>Week Day</th>
+            <th>Location</th>
+        </tr>
+    </table>
+    <form id="viewcourse-form">
+        <p>
+            <label for="course-id">Deleted CourseID:</label>
+            <input type="text" id="course-id" name="course-id" placeholder="put in course's ID here">
+        </p>
+        <p>
+            <button type="button" id="delete">Delete</button>
+        </p>
+        <p>
+            <button type="button" id="panel">Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/course_info");
+        const result=await response.json();
+        
+        const course_table=document.getElementById("coursetable");
+
+        result.courses.forEach(c => {
+            const row=document.createElement("tr");
+            row.innerHTML= `
+                <td>${c.id}</td>
+                <td>${c.name}</td>
+                <td>${c.credits}</td>
+                <td>${c.school}</td>
+                <td>${c.startingtime}</td>
+                <td>${c.endingtime}</td>
+                <td>${c.weekday}</td>
+                <td>${c.location}</td>
+            `;
+            course_table.appendChild(row);
+        });
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch Selected Courses!");
+        }
+    })
+
+     document.getElementById("delete").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const courseid=document.getElementById("course-id").value;
+        try{
+        const response=await fetch("http://localhost:8080/deletecourse",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    courseid:courseid
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Delete Successfully!");
+            window.location.href="deletecourse.html";
+        }
+        else
+        {
+            alert("Delete Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        window.location.href="adminpanel.html";
+    });
+    
+</script>
+</html>

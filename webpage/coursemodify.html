@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Course Information Modify</h1>
+    <p>hint: The time of the course cannot be changed if someone has enrolled. However, you can delete it in course delete page!</p>
+    <form id="modify-form">
+        <p>
+            <label>courseID</label>
+            <input type="text" id="courseID" name="courseID" placeholder="put in courseID here">
+        </p>
+        <p>
+            <label>new credits</label>
+            <input type="text" id="credits" name="credits" placeholder="put in credits here">
+        </p>
+        <p>
+            <label>new course title</label>
+            <input type="text" id="coursetitle" name="coursetitle" placeholder="put in course title here">
+        </p>
+        <p>
+            <label>new department</label>
+            <input type="text" id="department" name="department" placeholder="put in department title here">
+        </p>
+        <p>
+            <label>new location</label>
+            <input type="text" id="location" name="location" placeholder="put in location here">
+        </p>
+
+        
+        <p>
+            <button type="button" id="modify">Confirm</button>
+        </p>
+        <p>
+            <button type="button" id="panel">Back to Panel</button>
+        </p>
+    </form>
+</body>
+<script>
+    let userrole=null;
+    window.addEventListener("DOMContentLoaded",async()=>{
+        try{
+        const response=await fetch("http://localhost:8080/who");
+        const result=await response.json();
+        const id=result.id;
+        const role=result.role;
+        userrole=role;
+        }catch(err)
+        {
+            console.error(err);
+            alert("Cannot fetch ID!");
+        }
+    })
+    document.getElementById("panel").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        if(userrole!="admin")
+        {
+            window.location.href="datacenter.html";
+        }
+        else
+        {
+            window.location.href="adminpanel.html";
+        }
+    });
+    document.getElementById("modify").addEventListener("click",async(e)=>
+    {
+        e.preventDefault();
+        const courseID=document.getElementById("courseID").value;
+        const credits=document.getElementById("credits").value;
+        const coursetitle=document.getElementById("coursetitle").value;
+        const department=document.getElementById("department").value;
+        const location=document.getElementById("location").value;
+
+        
+        try{
+        const response=await fetch("http://localhost:8080/coursemodify",
+            {
+                method:"post",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    courseID:courseID,
+                    credits:credits,
+                    coursetitle:coursetitle,
+                    department:department,
+                    location:location
+                })
+            }
+        )
+        
+        const result=await response.json();
+        if(result.success)
+        {
+            alert("Modify Successfully!");
+            if(userrole!="admin")
+            {
+                window.location.href="datacenter.html";
+            }
+            else
+            {
+                window.location.href="adminpanel.html";
+            }
+        }
+        else
+        {
+            alert("Modify Failed!");
+        }
+        }catch(err)
+        {
+            console.error(err);
+            alert("Network Error!");
+        }
+    });
+</script>
+</html>
