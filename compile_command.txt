@@ -1,4 +1,4 @@
-g++ -D_WIN32_WINNT=0x0A00 main.cpp login.cpp courseselect.cpp coursedrop.cpp addcourse.cpp progress.cpp coursemodify.cpp -o server.exe -lsqlite3 -lws2_32
+g++ -D_WIN32_WINNT=0x0A00 main.cpp login.cpp courseselect.cpp coursedrop.cpp addcourse.cpp progress.cpp coursemodify.cpp agent.cpp -o server.exe -lsqlite3 -lws2_32
 
 
 
