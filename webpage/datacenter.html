@@ -1,81 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container{
+            width: 700px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1{
+            margin-top: 0;
+            color: #222;
+        }
+
+        h2{
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        p{
+            color: #555;
+            margin: 10px 0;
+        }
+
+        form p{
+            margin: 12px 0;
+        }
+
+        button{
+            background-color: #2d6cdf;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 180px;
+        }
+
+        button:hover{
+            background-color: #1f57b8;
+        }
+
+        textarea{
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 110px;
+            padding: 12px;
+            border: 1px solid #cfd6dd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus{
+            border-color: #2d6cdf;
+        }
+
+        .agent-section{
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #e3e7eb;
+        }
+
+        .agent-output{
+            margin-top: 15px;
+            background-color: #f8fafc;
+            border: 1px solid #dbe3ea;
+            border-radius: 6px;
+            padding: 12px;
+            min-height: 80px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #222;
+        }
+    </style>
+</head>
 <body>
-    <h1>Panel</h1>
-    <p>Click the Bottons</p>
-    <form id="datacenter-form">
-        <p>
-            <button type="button" id="modify">Modify Personal Information</button>
-        </p>
-        <p>
-            <button type="button" id="viewcourse">View Courses</button>
-        </p>
-        <p>
-            <button type="button" id="add">Add Courses</button>
-        </p>
-        <p>
-            <button type="button" id="drop">Drop Courses</button>
-        </p>
-        <p>
-            <button type="button" id="change">Change Courses</button>
-        </p>
-        <p>
-            <button type="button" id="mycourses">My Courses</button>
-        </p>
-        <p>
-            <button type="button" id="logout">Log Out</button>
-        </p>
-    </form>
+    <div class="container">
+        <h1>Panel</h1>
+        <p>Click the Buttons</p>
+
+        <form id="datacenter-form">
+            <p>
+                <button type="button" id="modify">Modify Personal Information</button>
+            </p>
+            <p>
+                <button type="button" id="viewcourse">View Courses</button>
+            </p>
+            <p>
+                <button type="button" id="add">Add Courses</button>
+            </p>
+            <p>
+                <button type="button" id="drop">Drop Courses</button>
+            </p>
+            <p>
+                <button type="button" id="change">Change Courses</button>
+            </p>
+            <p>
+                <button type="button" id="mycourses">My Courses</button>
+            </p>
+            <p>
+                <button type="button" id="logout">Log Out</button>
+            </p>
+        </form>
+
+        <div class="agent-section">
+            <h2>Course Agent</h2>
+            <p>Input your request here:</p>
+
+            <textarea
+                id="agent-input"
+                placeholder="For example: Help me drop my Monday morning course and add a CS course without time conflict."
+            ></textarea>
+
+            <p>
+                <button type="button" id="agent-run">Run Agent</button>
+            </p>
+
+            <div id="agent-output" class="agent-output">Agent result will be shown here.</div>
+        </div>
+    </div>
 </body>
+
 <script>
     window.addEventListener("DOMContentLoaded",async()=>{
         try{
-        const response=await fetch("http://localhost:8080/who");
-        const result=await response.json();
-        const id=result.id;
-        const role=result.role;
-        }catch(err)
-        {
+            const response=await fetch("http://localhost:8080/who");
+            const result=await response.json();
+            const id=result.id;
+            const role=result.role;
+        }catch(err){
             console.error(err);
             alert("Cannot fetch ID!");
         }
-    })
+    });
 
-    document.getElementById("modify").addEventListener("click",async(e)=>
-    {
+    document.getElementById("modify").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="modify.html";
     });
-    document.getElementById("logout").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("logout").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="login.html";
     });
-    document.getElementById("viewcourse").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("viewcourse").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="viewcourse.html";
     });
-    document.getElementById("add").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("add").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="select.html";
     });
-    document.getElementById("mycourses").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("mycourses").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="viewselectedcourses.html";
     });
-    document.getElementById("drop").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("drop").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="drop.html";
     });
-    document.getElementById("change").addEventListener("click",async(e)=>
-    {
+
+    document.getElementById("change").addEventListener("click",async(e)=>{
         e.preventDefault();
         window.location.href="change.html";
     });
-    
+
+    document.getElementById("agent-run").addEventListener("click",async(e)=>{
+        e.preventDefault();
+
+        const input=document.getElementById("agent-input").value.trim();
+        const output=document.getElementById("agent-output");
+
+        if(!input){
+            alert("Please enter your request first!");
+            return;
+        }
+
+        output.textContent="Running agent...";
+
+        try{
+            const response=await fetch("http://localhost:8080/agent",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    query:input
+                })
+            });
+
+            const result=await response.json();
+
+            if(result.final_message){
+                output.textContent=result.final_message;
+            }else{
+                output.textContent=JSON.stringify(result,null,2);
+            }
+        }catch(err){
+            console.error(err);
+            output.textContent="Agent request failed!";
+        }
+    });
 </script>
 </html>
