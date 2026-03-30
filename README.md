@@ -1,21 +1,11 @@
 # cpp-course-registration-system
 
-A full-stack course registration system featuring a C++ backend, a lightweight HTML
-frontend, and an SQLite database. The system is designed with a clear separation
-between client and server, where the frontend communicates with the backend via
-HTTP requests using JSON as the data format.
+A full-stack course registration system enhanced with an LLM-powered agent layer, featuring a C++ backend, a Python-based agent service, a lightweight HTML frontend, and an SQLite database. The system follows a modular architecture where the frontend communicates with backend services via HTTP using JSON.
 
-The backend is implemented in C++ and is responsible for core business logic,
-including authentication, course management, enrollment handling, and schedule
-conflict detection. All database operations are executed using prepared statements
-to ensure data integrity and prevent SQL injection vulnerabilities.
+The backend is implemented in C++ and is responsible for core business logic, including authentication, course management, enrollment handling, and schedule conflict detection. All database operations are executed using prepared statements to ensure data integrity and prevent SQL injection vulnerabilities.
 
-The frontend provides role-based user interfaces for students and administrators.
-Students can register, log in, browse available courses, select or drop courses,
-and view their current schedules. Administrators can manage course information,
-review registration status, and maintain system data.
+A Python-based LLM Agent service is introduced to enable natural language interaction. The agent interprets user queries, decomposes tasks, and invokes backend functionalities as tools (e.g., course search, schedule conflict checking, prerequisite validation). This allows users to perform complex operations such as course planning through flexible natural language input.
 
-This project focuses on system architecture, backend logic, and database design,
-with a deliberately lightweight frontend to emphasize functionality and clarity.
-The system is intended for local deployment and can be extended to support more
-advanced features or alternative database backends in the future.
+The frontend provides role-based user interfaces for students and administrators. In addition to traditional operations (registration, login, course browsing, enrollment, and schedule viewing), users can interact with the system through a text-based interface powered by the agent.
+
+This project emphasizes system architecture, tool abstraction, and LLM-driven workflow design, where deterministic logic is implemented as backend tools and decision-making is handled by the agent. The system is designed for local deployment and can be further extended with advanced agent workflows, additional tools, or alternative database backends.
