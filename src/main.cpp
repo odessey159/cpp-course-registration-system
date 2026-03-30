@@ -8,6 +8,7 @@ using json=nlohmann::json;
 std::string current_user_id="";
 std::string current_user_role="";
 
+bool agentprocess(sqlite3* db,const std::string& studentID,const std::string& query,std::string& final_message);
 bool studentlogin(sqlite3* db,const std::string& studentID,const std::string& password,std::string& outname);
 bool adminlogin(sqlite3* db,const std::string& studentID,const std::string& password,std::string& outname);
 
@@ -38,6 +39,9 @@ int main()
         {"Access-Control-Allow-Origin","*"},
         {"Access-Control-Allow-Headers","Content-Type"},
         {"Access-Control-Allow-Methods","POST, OPTIONS"},
+    });
+    svr.Options("/agent",[db](const httplib::Request& req,httplib::Response& res){
+    res.status=200;
     });
     svr.Options("/login",[db](const httplib::Request& req,httplib::Response& res){
         res.status=200;
@@ -89,6 +93,30 @@ int main()
         res.set_content(resp.dump(),"application/json");
     });
     
+    svr.Post("/agent",[db](const httplib::Request& req,httplib::Response& res){
+    json resp;
+
+    try
+    {
+        json recv = json::parse(req.body);
+        std::string query = recv["query"];
+
+        std::string final_message;
+
+        bool ok = agentprocess(db, current_user_id, query, final_message);
+
+        resp["success"] = ok;
+        resp["final_message"] = final_message;
+    }
+    catch(const std::exception& e)
+    {
+        resp["success"] = false;
+        resp["final_message"] = "Invalid request body!";
+    }
+
+    res.set_content(resp.dump(),"application/json");
+    });
+
     svr.Get("/course_info",[db](const httplib::Request& req,httplib::Response& res){
         std::string id=current_user_id;
         std::string role=current_user_role;
